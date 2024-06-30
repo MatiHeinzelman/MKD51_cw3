@@ -5,4 +5,4 @@
 #include "mkd51sim.h"
 #include <string.h>
 
-void WAIT_10US(unsigned int wait);
+void WAIT_10US( unsigned int myint );

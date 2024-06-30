@@ -1,0 +1,38 @@
+A51 MACRO ASSEMBLER  SLEEP                                                                06/30/2024 14:08:25 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN sleep.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE sleep.a51 SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     PUBLIC  _SL33P
+                       2     PRGSEG  SEGMENT CODE
+----                   3     RSEG    PRGSEG
+                       4     
+                       5      
+0000                   6     _SL33P:
+0000 AEFF              7             MOV R6,0xff
+0002 1E                8             DEC R6
+0003 70FB              9             JNZ _SL33P
+0005 22               10             RET
+                      11     
+                      12             
+                      13     END
+A51 MACRO ASSEMBLER  SLEEP                                                                06/30/2024 14:08:25 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+PRGSEG . . . . . .  C SEG    0006H       REL=UNIT
+_SL33P . . . . . .  C ADDR   0000H   R   SEG=PRGSEG
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

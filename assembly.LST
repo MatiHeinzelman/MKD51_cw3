@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 13:53:20 PAGE     1
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 16:11:10 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -11,71 +11,88 @@ LOC  OBJ            LINE     SOURCE
                        2     PRGSEG  SEGMENT CODE
 ----                   3     RSEG    PRGSEG
                        4     
-                       5     ; unsigned char GETADC(unsigned char nr_kanalu);
+  8008                 5     PTIO EQU 8008h  ; Base address of ADC channels
 0000                   6     _GETADC:
                        7     
-  8008                 8     PTIO EQU 8008h  ; Base address of ADC channels
-                       9      
-0000 8FF0             10     mov B,r7
-                      11     ;nextStep:
-0002 05F0             12     inc B
-                      13     
-                      14     ;PTIO EQU 8008h
-                      15     ; mov DPTR,#PTIO
-                      16     ; mov A,#0fh
-                      17     ; movx @DPTR,A
-                      18     ; movx A,@DPTR
-                      19     ; jnb ACC.0,X0_ON
-                      20     
+0000 EF                8             MOV A,r7 ; get param to Accumulator
+                       9     
+                      10             ; SET DIRECTION FLAG
+0001 B40102           11             CJNE A, #1 , noSetFlag1  ; 
+0004 7801             12              mov r0,#1;
+0006                  13             noSetFlag1:
+                      14             
+                      15             
+0006 B48002           16             CJNE A, #128 , noSetFlag0  ; 
+0009 7800             17              mov r0, #0
+000B                  18             noSetFlag0:
+                      19     
+                      20             
                       21             
-0004 908008           22      mov DPTR,#PTIO
-                      23      ;movx A,@DPTR
-0007 E5F0             24      mov A,B
-0009 F0               25      movx @DPTR,A
-                      26     
-000A AFF0             27     mov r7,b
-000C 22               28     ret
-                      29     
-                      30     ; 3. Read the conversion result
-                      31      ;   MOVX A, @DPTR       ; Read the result from ADC register
-                      32      ;   MOV R7, A           ; Store the result in R7
-                      33     
-                      34     
-                      35     
-                      36     
-                      37     
-                      38     
+000B B80003           22             CJNE r0, #0 , RotateLeft  ; R0is1
+000E B80103           23             CJNE r0, #1 , RotateRight  ; R0is1
+                      24     
+                      25             
+0011                  26             RotateLeft:
+0011 23               27             RL A
+0012 8003             28             jmp afterRorate
+                      29             
+0014                  30             RotateRight:
+0014 03               31             RR A
+0015 8000             32             jmp afterRorate
+                      33             
+0017                  34             afterRorate:
+                      35             
+                      36             
+                      37             
+                      38       
                       39     
-                      40     ; Rejestry A, R0-R7
-                      41     ; R7 <- nr_kanalu
-                      42     
-                      43     ; 1. POTn=x;
-                      44     
-                      45     ;    MOV DPTR, #0x8008   ; Base address of ADC channels
-                      46     ;    MOV DPL, R7         ; Load the channel number into DPL
-                      47     ;    CLR A
-                      48     ;    MOVX @DPTR, A       ; Start conversion by writing to the ADC register
-                      49     
-                      50     ; 2. Delay 120us - 120 iterations of loop
-000D E5FF             51         MOV A,0xff
-                      52     ;       MOV R6,0x5
-000F                  53     DELAY_LOOP:
-000F 14               54         DEC A
-                      55             
-0010 70FD             56             JNZ DELAY_LOOP
-                      57     ;       MOV R7,0xff
-                      58     ;       DEC R6
-A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 13:53:20 PAGE     2
+                      40     
+                      41                     ;PTIO EQU 8008h
+                      42                     ; mov DPTR,#PTIO
+                      43                     ; mov A,#0fh
+                      44                     ; movx @DPTR,A
+                      45                     ; movx A,@DPTR
+                      46                     ; jnb ACC.0,X0_ON
+                      47     
+                      48             
+0017 908008           49      mov DPTR,#PTIO  ; show B on LED
+001A F0               50      movx @DPTR,A
+                      51     
+                      52     
+001B FF               53     mov r7,A  ; mov A to param
+                      54     
+001C 8001             55     JMP _SL33P
+                      56     
+001E 22               57     ret       ; return with param
+                      58     
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 16:11:10 PAGE     2
 
-                      59     
-                      60     ;       JMP nextStep
-                      61     
-                      62     ; 3. Read the conversion result
-                      63     ;    MOVX A, @DPTR       ; Read the result from ADC register
-                      64     ;    MOV R7, A           ; Store the result in R7
-0012 22               65         RET
-                      66     END
-A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 13:53:20 PAGE     3
+                      59     ; 3. Read the conversion result
+                      60      ;   MOVX A, @DPTR       ; Read the result from ADC register
+                      61      ;   MOV R7, A           ; Store the result in R7
+                      62      
+                      63      
+                      64     PUBLIC  _SL33P
+001F                  65     _SL33P:
+001F 7DC8             66             MOV R5,#200
+0021                  67             myloopa:
+0021 74C8             68             MOV A,#200
+0023                  69             myloop:
+0023 14               70                     DEC A
+0024 70FD             71                     JNZ myloop
+                      72                     
+0026 1D               73                     DEC R5
+0027 BD00F7           74                     CJNE R5, #0 , myloopa  ; COMPARE destination, source and jump if not equal
+                      75     
+                      76     
+                      77                     
+002A 22               78             RET
+                      79     
+                      80             
+                      81     END 
+                             
+                              
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 16:11:10 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -83,11 +100,17 @@ SYMBOL TABLE LISTING
 
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
-B. . . . . . . . .  D ADDR   00F0H   A   
-DELAY_LOOP . . . .  C ADDR   000FH   R   SEG=PRGSEG
-PRGSEG . . . . . .  C SEG    0013H       REL=UNIT
+AFTERRORATE. . . .  C ADDR   0017H   R   SEG=PRGSEG
+MYLOOP . . . . . .  C ADDR   0023H   R   SEG=PRGSEG
+MYLOOPA. . . . . .  C ADDR   0021H   R   SEG=PRGSEG
+NOSETFLAG0 . . . .  C ADDR   000BH   R   SEG=PRGSEG
+NOSETFLAG1 . . . .  C ADDR   0006H   R   SEG=PRGSEG
+PRGSEG . . . . . .  C SEG    002BH       REL=UNIT
 PTIO . . . . . . .  N NUMB   8008H   A   
+ROTATELEFT . . . .  C ADDR   0011H   R   SEG=PRGSEG
+ROTATERIGHT. . . .  C ADDR   0014H   R   SEG=PRGSEG
 _GETADC. . . . . .  C ADDR   0000H   R   SEG=PRGSEG
+_SL33P . . . . . .  C ADDR   001FH   R   SEG=PRGSEG
 
 
 REGISTER BANK(S) USED: 0 

@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/30/2024  13:53:21  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/30/2024  16:16:26  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -23,8 +23,8 @@ LINK MAP OF MODULE:  mkd51sim (MAIN)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0002H     UNIT         ?DT?MAIN
-            IDATA   000AH     0001H     UNIT         ?STACK
+            DATA    0008H     0004H     UNIT         ?DT?MAIN
+            IDATA   000CH     0001H     UNIT         ?STACK
 
             * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
                     0000H     8008H                  *** GAP ***
@@ -34,10 +34,10 @@ LINK MAP OF MODULE:  mkd51sim (MAIN)
             CODE    0000H     0003H     ABSOLUTE     
                     0003H     07FDH                  *** GAP ***
             CODE    0800H     008CH     UNIT         ?C_C51STARTUP
-            CODE    088CH     0013H     UNIT         PRGSEG
-            CODE    089FH     000BH     UNIT         ?PR?MAIN?MAIN
-            CODE    08AAH     0005H     UNIT         ?C_INITSEG
-                    08AFH     0751H                  *** GAP ***
+            CODE    088CH     002BH     UNIT         PRGSEG
+            CODE    08B7H     000DH     UNIT         ?PR?MAIN?MAIN
+            CODE    08C4H     0009H     UNIT         ?C_INITSEG
+                    08CDH     0733H                  *** GAP ***
             CODE    1000H     0001H     ABSOLUTE     
                     1001H     0FFFH                  *** GAP ***
             CODE    2000H     0001H     ABSOLUTE     
@@ -59,7 +59,7 @@ SEGMENT
 ?C_C51STARTUP
   +--> ?PR?MAIN?MAIN
   +--> ?C_INITSEG
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/30/2024  13:53:21  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/30/2024  16:16:26  PAGE 2
 
 
 
@@ -79,47 +79,67 @@ SYMBOL TABLE OF MODULE:  mkd51sim (MAIN)
   C:2180H         PUBLIC        POT1_START
   C:22FFH         PUBLIC        POT2_START
   D:00B8H         PUBLIC        IP
-  C:089FH         PUBLIC        main
+  C:08B7H         PUBLIC        main
   C:1000H         PUBLIC        Persistend7sLED
   D:0008H         PUBLIC        myint
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
+  D:000AH         PUBLIC        direction
   X:8008H         PUBLIC        PTWY
   D:00C8H         PUBLIC        T2CON
   C:2380H         PUBLIC        POT7LED_START
   D:00D0H         PUBLIC        PSW
   -------         PROC          MAIN
-  C:089FH         LINE#         9
-  C:089FH         LINE#         11
-  C:08A9H         LINE#         20
+  C:08B7H         LINE#         10
+  C:08B7H         LINE#         12
+  C:08B7H         LINE#         14
+  C:08C2H         LINE#         16
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
   -------         MODULE        ASSEMBLY
   C:088CH         SEGMENT       PRGSEG
   C:088CH         PUBLIC        _GETADC
-  D:00F0H         SYMBOL        B
-  C:089BH         SYMBOL        DELAY_LOOP
+  C:08ABH         PUBLIC        _SL33P
+  C:08A3H         SYMBOL        AFTERRORATE
+  C:08AFH         SYMBOL        MYLOOP
+  C:08ADH         SYMBOL        MYLOOPA
+  C:0897H         SYMBOL        NOSETFLAG0
+  C:0892H         SYMBOL        NOSETFLAG1
   N:8008H         SYMBOL        PTIO
-  C:088CH         LINE#         10
-  C:088EH         LINE#         12
-  C:0890H         LINE#         22
-  C:0893H         LINE#         24
-  C:0895H         LINE#         25
-  C:0896H         LINE#         27
-  C:0898H         LINE#         28
-  C:0899H         LINE#         51
-  C:089BH         LINE#         54
-  C:089CH         LINE#         56
-  C:089EH         LINE#         65
+  C:089DH         SYMBOL        ROTATELEFT
+  C:08A0H         SYMBOL        ROTATERIGHT
+  C:088CH         LINE#         8
+  C:088DH         LINE#         11
+  C:0890H         LINE#         12
+  C:0892H         LINE#         16
+  C:0895H         LINE#         17
+  C:0897H         LINE#         22
+  C:089AH         LINE#         23
+  C:089DH         LINE#         27
+  C:089EH         LINE#         28
+  C:08A0H         LINE#         31
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/30/2024  16:16:26  PAGE 3
+
+
+  C:08A1H         LINE#         32
+  C:08A3H         LINE#         49
+  C:08A6H         LINE#         50
+  C:08A7H         LINE#         53
+  C:08A8H         LINE#         55
+  C:08AAH         LINE#         57
+  C:08ABH         LINE#         66
+  C:08ADH         LINE#         68
+  C:08AFH         LINE#         70
+  C:08B0H         LINE#         71
+  C:08B2H         LINE#         73
+  C:08B3H         LINE#         74
+  C:08B6H         LINE#         78
   -------         ENDMOD        ASSEMBLY
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0022H BYTE ( 1%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0040H BYTE ( 3%) *
 ******************************************************************************
 
-Program Size: data=11.0 xdata=1 code=183
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/30/2024  13:53:21  PAGE 3
-
-
+Program Size: data=13.0 xdata=1 code=213
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
