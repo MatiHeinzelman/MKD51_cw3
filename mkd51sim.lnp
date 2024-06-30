@@ -1,4 +1,3 @@
-"lcd.obj",
 "main.obj",
 "assembly.obj" 
 TO "mkd51sim" 

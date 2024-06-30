@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 11:31:14 PAGE     1
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 13:53:20 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -13,27 +13,69 @@ LOC  OBJ            LINE     SOURCE
                        4     
                        5     ; unsigned char GETADC(unsigned char nr_kanalu);
 0000                   6     _GETADC:
-                       7     ; Rejestry A, R0-R7
-                       8     ; R7 <- nr_kanalu
-                       9     
-                      10     ; 1. POTn=x;
-0000 908000           11         MOV DPTR, #0x8000   ; Base address of ADC channels
-0003 8F82             12         MOV DPL, R7         ; Load the channel number into DPL
-0005 E4               13         CLR A
-0006 F0               14         MOVX @DPTR, A       ; Start conversion by writing to the ADC register
-                      15     
-                      16     ; 2. Delay 120us - 120 iterations of loop
-0007 7428             17         MOV A, #40
-0009                  18     DELAY_LOOP:
-0009 14               19         DEC A
-000A 70FD             20         JNZ DELAY_LOOP
-                      21     
-                      22     ; 3. Read the conversion result
-000C E0               23         MOVX A, @DPTR       ; Read the result from ADC register
-000D FF               24         MOV R7, A           ; Store the result in R7
-000E 22               25         RET
-                      26     END
-A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 11:31:14 PAGE     2
+                       7     
+  8008                 8     PTIO EQU 8008h  ; Base address of ADC channels
+                       9      
+0000 8FF0             10     mov B,r7
+                      11     ;nextStep:
+0002 05F0             12     inc B
+                      13     
+                      14     ;PTIO EQU 8008h
+                      15     ; mov DPTR,#PTIO
+                      16     ; mov A,#0fh
+                      17     ; movx @DPTR,A
+                      18     ; movx A,@DPTR
+                      19     ; jnb ACC.0,X0_ON
+                      20     
+                      21             
+0004 908008           22      mov DPTR,#PTIO
+                      23      ;movx A,@DPTR
+0007 E5F0             24      mov A,B
+0009 F0               25      movx @DPTR,A
+                      26     
+000A AFF0             27     mov r7,b
+000C 22               28     ret
+                      29     
+                      30     ; 3. Read the conversion result
+                      31      ;   MOVX A, @DPTR       ; Read the result from ADC register
+                      32      ;   MOV R7, A           ; Store the result in R7
+                      33     
+                      34     
+                      35     
+                      36     
+                      37     
+                      38     
+                      39     
+                      40     ; Rejestry A, R0-R7
+                      41     ; R7 <- nr_kanalu
+                      42     
+                      43     ; 1. POTn=x;
+                      44     
+                      45     ;    MOV DPTR, #0x8008   ; Base address of ADC channels
+                      46     ;    MOV DPL, R7         ; Load the channel number into DPL
+                      47     ;    CLR A
+                      48     ;    MOVX @DPTR, A       ; Start conversion by writing to the ADC register
+                      49     
+                      50     ; 2. Delay 120us - 120 iterations of loop
+000D E5FF             51         MOV A,0xff
+                      52     ;       MOV R6,0x5
+000F                  53     DELAY_LOOP:
+000F 14               54         DEC A
+                      55             
+0010 70FD             56             JNZ DELAY_LOOP
+                      57     ;       MOV R7,0xff
+                      58     ;       DEC R6
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 13:53:20 PAGE     2
+
+                      59     
+                      60     ;       JMP nextStep
+                      61     
+                      62     ; 3. Read the conversion result
+                      63     ;    MOVX A, @DPTR       ; Read the result from ADC register
+                      64     ;    MOV R7, A           ; Store the result in R7
+0012 22               65         RET
+                      66     END
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 13:53:20 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -41,9 +83,10 @@ SYMBOL TABLE LISTING
 
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
-DELAY_LOOP . . . .  C ADDR   0009H   R   SEG=PRGSEG
-DPL. . . . . . . .  D ADDR   0082H   A   
-PRGSEG . . . . . .  C SEG    000FH       REL=UNIT
+B. . . . . . . . .  D ADDR   00F0H   A   
+DELAY_LOOP . . . .  C ADDR   000FH   R   SEG=PRGSEG
+PRGSEG . . . . . .  C SEG    0013H       REL=UNIT
+PTIO . . . . . . .  N NUMB   8008H   A   
 _GETADC. . . . . .  C ADDR   0000H   R   SEG=PRGSEG
 
 
