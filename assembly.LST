@@ -1,0 +1,53 @@
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 11:31:14 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN assembly.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE assembly.a51 SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     PUBLIC  _GETADC
+                       2     PRGSEG  SEGMENT CODE
+----                   3     RSEG    PRGSEG
+                       4     
+                       5     ; unsigned char GETADC(unsigned char nr_kanalu);
+0000                   6     _GETADC:
+                       7     ; Rejestry A, R0-R7
+                       8     ; R7 <- nr_kanalu
+                       9     
+                      10     ; 1. POTn=x;
+0000 908000           11         MOV DPTR, #0x8000   ; Base address of ADC channels
+0003 8F82             12         MOV DPL, R7         ; Load the channel number into DPL
+0005 E4               13         CLR A
+0006 F0               14         MOVX @DPTR, A       ; Start conversion by writing to the ADC register
+                      15     
+                      16     ; 2. Delay 120us - 120 iterations of loop
+0007 7428             17         MOV A, #40
+0009                  18     DELAY_LOOP:
+0009 14               19         DEC A
+000A 70FD             20         JNZ DELAY_LOOP
+                      21     
+                      22     ; 3. Read the conversion result
+000C E0               23         MOVX A, @DPTR       ; Read the result from ADC register
+000D FF               24         MOV R7, A           ; Store the result in R7
+000E 22               25         RET
+                      26     END
+A51 MACRO ASSEMBLER  ASSEMBLY                                                             06/30/2024 11:31:14 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY_LOOP . . . .  C ADDR   0009H   R   SEG=PRGSEG
+DPL. . . . . . . .  D ADDR   0082H   A   
+PRGSEG . . . . . .  C SEG    000FH       REL=UNIT
+_GETADC. . . . . .  C ADDR   0000H   R   SEG=PRGSEG
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
